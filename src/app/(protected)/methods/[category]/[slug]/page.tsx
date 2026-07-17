@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { DetailSection } from "@/components/catalog/DetailSection";
+import { EditLink } from "@/components/admin/EditLink";
 import { getMethodBySlug } from "@/lib/content/methods";
 
 export const dynamic = "force-dynamic";
@@ -24,7 +25,10 @@ export default async function MethodDetailPage({
           { label: method.name },
         ]}
       />
-      <h1 className="text-3xl font-semibold tracking-tight">{method.name}</h1>
+      <div className="flex items-start justify-between gap-4">
+        <h1 className="text-3xl font-semibold tracking-tight">{method.name}</h1>
+        <EditLink href={`/admin/methods/${method.id}`} />
+      </div>
       <p className="mt-2 text-black/60 dark:text-white/60">{method.summary}</p>
 
       <div className="mt-8">

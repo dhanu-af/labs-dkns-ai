@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { EditLink } from "@/components/admin/EditLink";
 import { listGlossaryTerms } from "@/lib/content/glossary";
 
 export const metadata: Metadata = { title: "Glossary of Terms" };
@@ -25,9 +26,12 @@ export default async function GlossaryPage() {
       ) : (
         <dl className="mt-8 divide-y divide-black/10 dark:divide-white/10">
           {terms.map((term) => (
-            <div key={term.id} id={term.slug} className="py-4">
-              <dt className="font-medium">{term.term}</dt>
-              <dd className="mt-1 text-sm text-black/70 dark:text-white/70">{term.definition}</dd>
+            <div key={term.id} id={term.slug} className="flex items-start justify-between gap-4 py-4">
+              <div>
+                <dt className="font-medium">{term.term}</dt>
+                <dd className="mt-1 text-sm text-black/70 dark:text-white/70">{term.definition}</dd>
+              </div>
+              <EditLink href={`/admin/glossary/${term.id}`} />
             </div>
           ))}
         </dl>

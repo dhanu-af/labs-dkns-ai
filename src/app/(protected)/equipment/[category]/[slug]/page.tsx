@@ -3,6 +3,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { DetailSection } from "@/components/catalog/DetailSection";
 import { SpecTable } from "@/components/catalog/SpecTable";
 import { ManufacturerList } from "@/components/catalog/ManufacturerList";
+import { EditLink } from "@/components/admin/EditLink";
 import { getEquipmentBySlug } from "@/lib/content/equipment";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +27,10 @@ export default async function EquipmentDetailPage({
           { label: equipment.name },
         ]}
       />
-      <h1 className="text-3xl font-semibold tracking-tight">{equipment.name}</h1>
+      <div className="flex items-start justify-between gap-4">
+        <h1 className="text-3xl font-semibold tracking-tight">{equipment.name}</h1>
+        <EditLink href={`/admin/equipment/${equipment.id}`} />
+      </div>
       <p className="mt-2 text-black/60 dark:text-white/60">{equipment.summary}</p>
 
       <div className="mt-8">

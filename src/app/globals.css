@@ -153,3 +153,67 @@ body {
     animation: none;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* App shell: premium SaaS homepage (glass header, dot grid, cards)   */
+/* ------------------------------------------------------------------ */
+
+.app-glass-header {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-glass-header {
+    background: rgba(10, 10, 14, 0.6);
+  }
+}
+
+.app-dot-grid {
+  background-image: radial-gradient(rgba(99, 102, 241, 0.16) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-dot-grid {
+    background-image: radial-gradient(rgba(139, 92, 246, 0.18) 1px, transparent 1px);
+  }
+}
+
+.app-card-hover {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.app-card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px -20px rgba(79, 70, 229, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-card-hover:hover {
+    box-shadow: 0 20px 40px -20px rgba(139, 92, 246, 0.35);
+  }
+}
+
+.app-pill {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.app-pill:hover {
+  transform: translateY(-1px);
+}
+
+.app-hero-glow {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+}
+
+.app-search-shadow {
+  box-shadow: 0 8px 30px -8px rgba(79, 70, 229, 0.18), 0 2px 8px -2px rgba(15, 23, 42, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-search-shadow {
+    box-shadow: 0 8px 30px -8px rgba(139, 92, 246, 0.28), 0 2px 8px -2px rgba(0, 0, 0, 0.4);
+  }
+}

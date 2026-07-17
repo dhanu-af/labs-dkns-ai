@@ -1,4 +1,5 @@
 import { HeroSearch } from "@/components/home/HeroSearch";
+import { ModuleCards } from "@/components/home/ModuleCards";
 import { FeaturedCategories } from "@/components/home/FeaturedCategories";
 import { LatestArticles } from "@/components/home/LatestArticles";
 import { listEquipmentCategories } from "@/lib/content/equipment";
@@ -15,8 +16,10 @@ export default async function Home() {
   ]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-slate-50 dark:bg-[#0b0d14]">
       <HeroSearch />
+      <ModuleCards />
+      <div className="mx-auto h-px w-full max-w-6xl bg-slate-900/[0.06] dark:bg-white/10" />
       <FeaturedCategories title="Equipment & Instruments" basePath="/equipment" categories={equipmentCategories} />
       <FeaturedCategories title="Methods & Techniques" basePath="/methods" categories={methodCategories} />
       <LatestArticles articles={articles} />

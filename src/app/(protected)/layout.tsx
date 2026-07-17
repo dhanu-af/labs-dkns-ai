@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { MotionProvider } from "@/components/motion/MotionProvider";
 
 export default async function ProtectedLayout({
   children,
@@ -12,10 +13,12 @@ export default async function ProtectedLayout({
   if (!session) redirect("/login");
 
   return (
-    <div className="flex min-h-full flex-1 flex-col">
-      <SiteHeader />
-      <main className="flex-1">{children}</main>
-      <SiteFooter />
-    </div>
+    <MotionProvider>
+      <div className="flex min-h-full flex-1 flex-col">
+        <SiteHeader />
+        <main className="flex-1">{children}</main>
+        <SiteFooter />
+      </div>
+    </MotionProvider>
   );
 }

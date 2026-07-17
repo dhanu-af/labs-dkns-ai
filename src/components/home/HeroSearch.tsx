@@ -46,6 +46,7 @@ export function HeroSearch() {
           }}
         />
         <div className="app-dot-grid absolute inset-0" />
+        <div className="app-noise absolute inset-0" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-50 dark:to-[#0b0d14]" />
       </div>
 

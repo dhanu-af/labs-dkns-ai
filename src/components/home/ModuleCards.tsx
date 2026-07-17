@@ -111,24 +111,26 @@ export function ModuleCards() {
         className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
       >
         {modules.map((mod) => (
-          <motion.div key={mod.href} variants={item} whileHover={{ y: -4 }}>
+          <motion.div key={mod.href} variants={item} whileHover={{ y: -4 }} className="app-ring-wrap h-full">
             <Link
               href={mod.href}
-              className="app-card-hover group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-900/[0.07] bg-white p-5 dark:border-white/10 dark:bg-white/[0.03]"
+              className="app-ring-inner app-card-hover group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-900/[0.07] bg-white p-5 dark:border-white/10 dark:bg-white/[0.03]"
             >
               {mod.phase !== 1 && (
                 <div className="absolute right-4 top-4">
                   <PhaseBadge phase={mod.phase} />
                 </div>
               )}
-              <span
-                className="flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-sm transition-transform duration-300 group-hover:scale-110"
+              <motion.span
+                whileHover={{ rotate: -6, scale: 1.12 }}
+                transition={{ type: "spring", stiffness: 350, damping: 15 }}
+                className="flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-sm"
                 style={{ background: mod.gradient }}
               >
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
                   {mod.icon}
                 </svg>
-              </span>
+              </motion.span>
               <p className="mt-4 font-semibold text-slate-900 dark:text-white">{mod.title}</p>
               <p className="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-white/55">{mod.description}</p>
               <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-indigo-600 opacity-0 transition-opacity group-hover:opacity-100 dark:text-violet-400">

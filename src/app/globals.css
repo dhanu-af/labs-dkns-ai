@@ -244,3 +244,32 @@ body {
   opacity: 0.5;
   mix-blend-mode: overlay;
 }
+
+/* ------------------------------------------------------------------ */
+/* Admin forms                                                         */
+/* ------------------------------------------------------------------ */
+
+.admin-input {
+  width: 100%;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: #ffffff;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #0f172a;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-input:focus {
+  outline: none;
+  border-color: rgba(99, 102, 241, 0.55);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  .admin-input {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #f1f5f9;
+  }
+}

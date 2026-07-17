@@ -25,6 +25,12 @@ export function SiteHeader() {
           <div className="hidden w-full max-w-md md:block">
             <SearchBar compact />
           </div>
+          <Link
+            href="/admin"
+            className="app-pill hidden shrink-0 rounded-full border border-slate-900/[0.08] px-3.5 py-1.5 text-sm font-medium text-slate-600 hover:border-slate-900/15 hover:bg-slate-900/[0.04] hover:text-slate-900 sm:inline-block dark:border-white/10 dark:text-white/60 dark:hover:border-white/20 dark:hover:bg-white/10 dark:hover:text-white"
+          >
+            Admin
+          </Link>
           <LogoutButton />
         </div>
         <nav className="-mx-2 flex flex-wrap gap-1 overflow-x-auto text-sm">

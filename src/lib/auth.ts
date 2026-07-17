@@ -70,3 +70,13 @@ export async function login(username: string, password: string, remember = false
 export async function logout() {
   await destroySession();
 }
+
+// Server actions render their own errors, so they can't rely on the
+// (protected) layout's redirect -- a form's action id is visible in the
+// rendered HTML and can be invoked directly, bypassing the page. Every
+// mutating admin action must call this first as defense in depth.
+export async function requireSession(): Promise<SessionPayload> {
+  const session = await getSession();
+  if (!session) throw new Error("Not authenticated");
+  return session;
+}

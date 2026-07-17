@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { primaryNav, siteName } from "@/lib/site-config";
 import { SearchBar } from "@/components/layout/SearchBar";
+import { LogoutButton } from "@/components/layout/LogoutButton";
 
 export function SiteHeader() {
   return (
@@ -13,6 +14,7 @@ export function SiteHeader() {
           <div className="hidden w-full max-w-md md:block">
             <SearchBar compact />
           </div>
+          <LogoutButton />
         </div>
         <nav className="-mx-2 flex flex-wrap gap-1 overflow-x-auto text-sm">
           {primaryNav.map((item) => (

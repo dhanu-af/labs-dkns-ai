@@ -5,7 +5,10 @@ import { LogoutButton } from "@/components/layout/LogoutButton";
 
 export function SiteHeader() {
   return (
-    <header className="app-glass-header sticky top-0 z-40 border-b border-slate-900/[0.06] dark:border-white/10">
+    <header
+      className="app-glass-header sticky top-0 z-40 border-b border-slate-900/[0.06] dark:border-white/10"
+      style={{ backdropFilter: "blur(16px) saturate(160%)", WebkitBackdropFilter: "blur(16px) saturate(160%)" }}
+    >
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-3.5">
         <div className="flex items-center justify-between gap-6">
           <Link href="/" className="flex items-center gap-2 shrink-0">

@@ -68,6 +68,8 @@ export default async function LoginPage({
             className="glass-panel relative overflow-hidden rounded-[27px] p-7"
             style={{
               boxShadow: "0 30px 70px -25px rgba(0,0,0,0.7), 0 0 60px -20px rgba(16,185,129,0.18)",
+              backdropFilter: "blur(24px) saturate(180%)",
+              WebkitBackdropFilter: "blur(24px) saturate(180%)",
             }}
           >
             {/* subtle top sheen line */}

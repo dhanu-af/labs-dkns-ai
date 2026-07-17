@@ -111,8 +111,9 @@ body {
 
 .glass-panel {
   background: linear-gradient(165deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  /* backdrop-filter is applied inline (style prop) at the call site --
+     the production CSS pipeline silently drops this property when it's
+     declared inside a plain class rule here. */
 }
 
 .auth-input {
@@ -160,8 +161,9 @@ body {
 
 .app-glass-header {
   background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  /* backdrop-filter is applied inline (style prop) at the call site --
+     the production CSS pipeline silently drops this property when it's
+     declared inside a plain class rule here. */
 }
 
 @media (prefers-color-scheme: dark) {

@@ -1,5 +1,8 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import bcrypt from "bcryptjs";
+import { prisma } from "@/lib/prisma";
+import type { UserRole } from "@prisma/client";
 
 const COOKIE_NAME = "labs_session";
 const secret = new TextEncoder().encode(process.env.SESSION_SECRET ?? "dev-only-secret");
@@ -8,8 +11,18 @@ const SESSION_MAX_AGE_REMEMBER = 60 * 60 * 24 * 30; // 30 days
 const SESSION_MAX_AGE_DEFAULT = 60 * 60 * 24; // 1 day
 
 export type SessionPayload = {
+  userId: string;
   username: string;
+  role: UserRole;
 };
+
+export function isSuperAdmin(role: UserRole) {
+  return role === "SUPER_ADMIN";
+}
+
+export async function hashPassword(password: string) {
+  return bcrypt.hash(password, 10);
+}
 
 export async function createSession(payload: SessionPayload, remember = false) {
   const maxAge = remember ? SESSION_MAX_AGE_REMEMBER : SESSION_MAX_AGE_DEFAULT;
@@ -46,24 +59,14 @@ export async function getSession(): Promise<SessionPayload | null> {
   }
 }
 
-// Single shared credential, checked against env vars -- there is no
-// multi-user model for this site, so a User table would be unused
-// complexity. SITE_PASSWORD must be set; without it every login is
-// rejected rather than falling back to a guessable default.
 export async function login(username: string, password: string, remember = false) {
-  const expectedUsername = process.env.SITE_USERNAME ?? "admin";
-  const expectedPassword = process.env.SITE_PASSWORD;
+  const user = await prisma.user.findUnique({ where: { username } });
+  if (!user) return { error: "Invalid User ID or password" as const };
 
-  if (!expectedPassword) {
-    console.error("SITE_PASSWORD is not set -- rejecting all logins.");
-    return { error: "Login is not configured yet." as const };
-  }
+  const valid = await bcrypt.compare(password, user.passwordHash);
+  if (!valid) return { error: "Invalid User ID or password" as const };
 
-  if (username !== expectedUsername || password !== expectedPassword) {
-    return { error: "Invalid User ID or password" as const };
-  }
-
-  await createSession({ username }, remember);
+  await createSession({ userId: user.id, username: user.username, role: user.role }, remember);
   return { ok: true as const };
 }
 
@@ -78,5 +81,14 @@ export async function logout() {
 export async function requireSession(): Promise<SessionPayload> {
   const session = await getSession();
   if (!session) throw new Error("Not authenticated");
+  return session;
+}
+
+// User management (creating/deleting accounts) is restricted to
+// SUPER_ADMIN; everyone else still gets full content edit access via
+// requireSession() above.
+export async function requireSuperAdmin(): Promise<SessionPayload> {
+  const session = await requireSession();
+  if (!isSuperAdmin(session.role)) throw new Error("Super admin access required");
   return session;
 }

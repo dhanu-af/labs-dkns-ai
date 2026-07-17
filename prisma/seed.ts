@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -21,6 +22,24 @@ async function upsertCategory(
 }
 
 async function main() {
+  // -------------------------------------------------------------------
+  // Bootstrap the initial super admin account from env vars, never from
+  // a literal in source (this repo is public). Safe to re-run: if the
+  // password env var changes, the stored hash is refreshed on next
+  // deploy. Skips silently if the account already exists and no
+  // bootstrap password is configured.
+  // -------------------------------------------------------------------
+  const bootstrapUsername = process.env.SITE_USERNAME;
+  const bootstrapPassword = process.env.SITE_PASSWORD;
+  if (bootstrapUsername && bootstrapPassword) {
+    const passwordHash = await bcrypt.hash(bootstrapPassword, 10);
+    await prisma.user.upsert({
+      where: { username: bootstrapUsername },
+      update: { passwordHash, role: "SUPER_ADMIN" },
+      create: { username: bootstrapUsername, passwordHash, role: "SUPER_ADMIN" },
+    });
+  }
+
   // -------------------------------------------------------------------
   // Equipment taxonomy (2.2 Analytical Instruments, 2.3 General Lab Equipment)
   // -------------------------------------------------------------------

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getSession, isSuperAdmin } from "@/lib/auth";
 
 const sections = [
   { label: "Dashboard", href: "/admin" },
@@ -9,10 +10,13 @@ const sections = [
   { label: "Safety Guides", href: "/admin/safety" },
 ];
 
-export function AdminNav() {
+export async function AdminNav() {
+  const session = await getSession();
+  const items = session && isSuperAdmin(session.role) ? [...sections, { label: "Users", href: "/admin/users" }] : sections;
+
   return (
     <nav className="-mx-1 mb-8 flex flex-wrap gap-1 border-b border-slate-900/[0.07] pb-4 dark:border-white/10">
-      {sections.map((s) => (
+      {items.map((s) => (
         <Link
           key={s.href}
           href={s.href}

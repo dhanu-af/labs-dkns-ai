@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { getGuidePage } from "@/lib/content/guides";
 
+export const dynamic = "force-dynamic";
+
 export default async function SafetyTopicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const topic = await getGuidePage("SAFETY", slug);

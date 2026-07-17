@@ -5,6 +5,7 @@ import { PhaseBadge } from "@/components/ui/PhaseBadge";
 import { listGuidePages } from "@/lib/content/guides";
 
 export const metadata: Metadata = { title: "Safety & Compliance" };
+export const dynamic = "force-dynamic";
 
 const phase2Sections = [
   { title: "Regulatory Standards by Region", description: "US (OSHA, EPA, FDA), EU (REACH, CLP), Asia-Pacific, Middle East, and more." },

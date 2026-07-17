@@ -5,6 +5,7 @@ import { listPublishedArticles } from "@/lib/content/articles";
 import { ItemCard } from "@/components/catalog/ItemCard";
 
 export const metadata: Metadata = { title: "News & Insights" };
+export const dynamic = "force-dynamic";
 
 export default async function BlogPage() {
   const articles = await listPublishedArticles(20);

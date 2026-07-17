@@ -5,6 +5,8 @@ import { SpecTable } from "@/components/catalog/SpecTable";
 import { ManufacturerList } from "@/components/catalog/ManufacturerList";
 import { getEquipmentBySlug } from "@/lib/content/equipment";
 
+export const dynamic = "force-dynamic";
+
 export default async function EquipmentDetailPage({
   params,
 }: {

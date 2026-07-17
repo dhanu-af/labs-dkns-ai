@@ -4,6 +4,7 @@ import { CategoryIndex } from "@/components/catalog/CategoryIndex";
 import { listEquipmentCategories } from "@/lib/content/equipment";
 
 export const metadata: Metadata = { title: "Equipment & Instruments" };
+export const dynamic = "force-dynamic";
 
 export default async function EquipmentIndexPage() {
   const categories = await listEquipmentCategories();

@@ -3,6 +3,8 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ItemCard } from "@/components/catalog/ItemCard";
 import { listMethodsByCategorySlug } from "@/lib/content/methods";
 
+export const dynamic = "force-dynamic";
+
 export default async function MethodCategoryPage({
   params,
 }: {

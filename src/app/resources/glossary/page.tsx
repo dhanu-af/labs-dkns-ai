@@ -3,6 +3,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { listGlossaryTerms } from "@/lib/content/glossary";
 
 export const metadata: Metadata = { title: "Glossary of Terms" };
+export const dynamic = "force-dynamic";
 
 export default async function GlossaryPage() {
   const terms = await listGlossaryTerms();

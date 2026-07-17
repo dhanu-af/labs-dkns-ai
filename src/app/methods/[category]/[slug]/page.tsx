@@ -3,6 +3,8 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { DetailSection } from "@/components/catalog/DetailSection";
 import { getMethodBySlug } from "@/lib/content/methods";
 
+export const dynamic = "force-dynamic";
+
 export default async function MethodDetailPage({
   params,
 }: {

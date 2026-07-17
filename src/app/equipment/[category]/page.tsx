@@ -3,6 +3,8 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ItemCard } from "@/components/catalog/ItemCard";
 import { listEquipmentByCategorySlug } from "@/lib/content/equipment";
 
+export const dynamic = "force-dynamic";
+
 export default async function EquipmentCategoryPage({
   params,
 }: {

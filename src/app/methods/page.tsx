@@ -4,6 +4,7 @@ import { CategoryIndex } from "@/components/catalog/CategoryIndex";
 import { listMethodCategories } from "@/lib/content/methods";
 
 export const metadata: Metadata = { title: "Methods & Techniques" };
+export const dynamic = "force-dynamic";
 
 export default async function MethodsIndexPage() {
   const categories = await listMethodCategories();

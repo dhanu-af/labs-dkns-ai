@@ -3,6 +3,7 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { listStandards } from "@/lib/content/standards";
 
 export const metadata: Metadata = { title: "Standards & Regulations Library" };
+export const dynamic = "force-dynamic";
 
 export default async function StandardsPage() {
   const standards = await listStandards();

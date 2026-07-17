@@ -5,6 +5,7 @@ import { listDirectoryListings } from "@/lib/content/directory";
 import { ItemCard } from "@/components/catalog/ItemCard";
 
 export const metadata: Metadata = { title: "Directory" };
+export const dynamic = "force-dynamic";
 
 export default async function DirectoryPage() {
   const listings = await listDirectoryListings();

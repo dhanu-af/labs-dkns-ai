@@ -12,9 +12,9 @@ const tiles: { key: keyof SiteStats; label: string }[] = [
   { key: "glossaryTerms", label: "Glossary terms" },
 ];
 
-// Real content counts, animated on scroll into view -- there's no
-// usage/analytics data behind this site, so this is the honest, buildable
-// version of "interactive statistics" for a content reference hub.
+// Real content counts, animated on mount -- there's no usage/analytics data
+// behind this site, so this is the honest, buildable version of "interactive
+// statistics" for a content reference hub.
 export function StatsBar({ stats }: { stats: SiteStats }) {
   return (
     <section className="border-b border-slate-900/[0.06] px-6 py-10 dark:border-white/10">

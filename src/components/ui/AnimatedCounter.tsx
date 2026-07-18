@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { animate, useInView, useMotionValue, useMotionValueEvent } from "framer-motion";
+import { useEffect, useState } from "react";
+import { animate, useMotionValue, useMotionValueEvent } from "framer-motion";
 
 interface AnimatedCounterProps {
   value: number;
@@ -11,11 +11,14 @@ interface AnimatedCounterProps {
 }
 
 // Counts up from 0 to a resolved number (fetched server-side, not a live
-// subscription) once scrolled into view. Respects reduced-motion via the
-// ancestor MotionConfig (framer-motion's `animate()` still checks it).
+// subscription) as soon as the component mounts. Respects reduced-motion via
+// the ancestor MotionConfig (framer-motion's `animate()` still checks it).
+// Deliberately does not gate on scroll-into-view (e.g. via useInView) --
+// verified in this project's sandbox that IntersectionObserver-driven hooks
+// don't reliably fire in the preview automation tooling, and the stats bar
+// sits right below the fold anyway, so animating on mount is both simpler
+// and more robust than a scroll-triggered version we can't fully verify here.
 export function AnimatedCounter({ value, className, suffix = "" }: AnimatedCounterProps) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
   const motionValue = useMotionValue(0);
   const [display, setDisplay] = useState(0);
 
@@ -24,13 +27,12 @@ export function AnimatedCounter({ value, className, suffix = "" }: AnimatedCount
   });
 
   useEffect(() => {
-    if (!inView) return;
     const controls = animate(motionValue, value, { duration: 1.2, ease: [0.16, 1, 0.3, 1] });
     return () => controls.stop();
-  }, [inView, value, motionValue]);
+  }, [value, motionValue]);
 
   return (
-    <span ref={ref} className={className}>
+    <span className={className}>
       {display.toLocaleString()}
       {suffix}
     </span>

@@ -3,6 +3,7 @@ import { getSession } from "@/lib/auth";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { MotionProvider } from "@/components/motion/MotionProvider";
+import { PageTransition } from "@/components/motion/PageTransition";
 
 export default async function ProtectedLayout({
   children,
@@ -16,7 +17,9 @@ export default async function ProtectedLayout({
     <MotionProvider>
       <div className="flex min-h-full flex-1 flex-col">
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <PageTransition>{children}</PageTransition>
+        </main>
         <SiteFooter />
       </div>
     </MotionProvider>

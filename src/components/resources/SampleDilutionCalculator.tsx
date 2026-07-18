@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Trash2, FlaskConical } from "lucide-react";
+import { Plus, Trash2, FlaskConical, FileSpreadsheet, FileText } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { IconTile } from "@/components/ui/IconTile";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { downloadExcel, downloadPdf, type ExportColumn } from "@/lib/export";
 
 interface SampleRow {
   id: number;
@@ -73,8 +74,57 @@ function fmt(n: number | null, digits = 6) {
   return Number(n.toPrecision(digits)).toString();
 }
 
+const exportColumns: ExportColumn[] = [
+  { header: "Job #", key: "jobNumber" },
+  { header: "Sample details", key: "sampleDetails" },
+  { header: "Specification", key: "specification" },
+  { header: "Lower value", key: "lowerValue" },
+  { header: "Upper value", key: "upperValue" },
+  { header: "ATW", key: "atw" },
+  { header: "Sample wt (g)", key: "sampleWtGms" },
+  { header: "Initial dilution", key: "initialDilution" },
+  { header: "Required vol", key: "requiredVol" },
+  { header: "Final vol", key: "finalVol" },
+  { header: "Dilution factor", key: "dilutionFactor" },
+  { header: "Lower conc (mg/mL)", key: "lowerConc" },
+  { header: "Upper conc (mg/mL)", key: "upperConc" },
+  { header: "Lower PPM", key: "lowerPpm" },
+  { header: "Upper PPM", key: "upperPpm" },
+  { header: "Lower PPB", key: "lowerPpb" },
+  { header: "Upper PPB", key: "upperPpb" },
+];
+
 export function SampleDilutionCalculator() {
   const [rows, setRows] = useState<SampleRow[]>(initialRows);
+
+  function buildExportRows() {
+    return rows.map((row) => {
+      const { dilutionFactor, lowerConc, upperConc } = compute(row);
+      const lowerPpm = lowerConc !== null ? lowerConc * 1000 : null;
+      const upperPpm = upperConc !== null ? upperConc * 1000 : null;
+      const lowerPpb = lowerPpm !== null ? lowerPpm * 1000 : null;
+      const upperPpb = upperPpm !== null ? upperPpm * 1000 : null;
+      return {
+        jobNumber: row.jobNumber,
+        sampleDetails: row.sampleDetails,
+        specification: row.specification,
+        lowerValue: row.lowerValue,
+        upperValue: row.upperValue,
+        atw: row.atw,
+        sampleWtGms: row.sampleWtGms,
+        initialDilution: row.initialDilution,
+        requiredVol: row.requiredVol,
+        finalVol: row.finalVol,
+        dilutionFactor: fmt(dilutionFactor),
+        lowerConc: fmt(lowerConc),
+        upperConc: fmt(upperConc),
+        lowerPpm: fmt(lowerPpm),
+        upperPpm: fmt(upperPpm),
+        lowerPpb: fmt(lowerPpb),
+        upperPpb: fmt(upperPpb),
+      };
+    });
+  }
 
   function updateRow(id: number, field: keyof SampleRow, value: string) {
     setRows((prev) => prev.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
@@ -117,9 +167,25 @@ export function SampleDilutionCalculator() {
             </p>
           </div>
         </div>
-        <Button variant="secondary" size="sm" onClick={addRow}>
-          <Plus size={14} /> Add row
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => downloadExcel("Sample Dilution", exportColumns, buildExportRows(), "sample-dilution.xlsx")}
+          >
+            <FileSpreadsheet size={14} /> Excel
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => downloadPdf("Sample Dilution & Specification", exportColumns, buildExportRows(), "sample-dilution.pdf")}
+          >
+            <FileText size={14} /> PDF
+          </Button>
+          <Button variant="secondary" size="sm" onClick={addRow}>
+            <Plus size={14} /> Add row
+          </Button>
+        </div>
       </div>
 
       <div className="mt-4 overflow-x-auto">

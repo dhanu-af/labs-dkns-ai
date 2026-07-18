@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Trash2, TestTube } from "lucide-react";
+import { Plus, Trash2, TestTube, FileSpreadsheet, FileText } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { IconTile } from "@/components/ui/IconTile";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { downloadExcel, downloadPdf, type ExportColumn } from "@/lib/export";
 
 interface CalRow {
   id: number;
@@ -53,8 +54,43 @@ function fmt(n: number | null, digits = 6) {
   return Number(n.toPrecision(digits)).toString();
 }
 
+const exportColumns: ExportColumn[] = [
+  { header: "Analyte", key: "analyte" },
+  { header: "Cal point", key: "calPoint" },
+  { header: "Std ID", key: "stdId" },
+  { header: "Potency (%)", key: "potency" },
+  { header: "Weight (mg)", key: "weightMg" },
+  { header: "Dilution (vol)", key: "dilutionVol" },
+  { header: "Vol required", key: "volRequired" },
+  { header: "Final vol", key: "finalVol" },
+  { header: "Conc (mg/mL)", key: "conc" },
+  { header: "PPM", key: "ppm" },
+  { header: "PPB", key: "ppb" },
+];
+
 export function CalibrationStandardsCalculator() {
   const [rows, setRows] = useState<CalRow[]>(initialRows);
+
+  function buildExportRows() {
+    return rows.map((row) => {
+      const conc = computeConc(row);
+      const ppm = conc !== null ? conc * 1000 : null;
+      const ppb = ppm !== null ? ppm * 1000 : null;
+      return {
+        analyte: row.analyte,
+        calPoint: row.calPoint,
+        stdId: row.stdId,
+        potency: row.potency,
+        weightMg: row.weightMg,
+        dilutionVol: row.dilutionVol,
+        volRequired: row.volRequired,
+        finalVol: row.finalVol,
+        conc: fmt(conc),
+        ppm: fmt(ppm),
+        ppb: fmt(ppb),
+      };
+    });
+  }
 
   function updateRow(id: number, field: keyof CalRow, value: string) {
     setRows((prev) => prev.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
@@ -85,9 +121,27 @@ export function CalibrationStandardsCalculator() {
             </p>
           </div>
         </div>
-        <Button variant="secondary" size="sm" onClick={addRow}>
-          <Plus size={14} /> Add row
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => downloadExcel("Calibration Standards", exportColumns, buildExportRows(), "calibration-standards.xlsx")}
+          >
+            <FileSpreadsheet size={14} /> Excel
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() =>
+              downloadPdf("Calibration Standards (CAL Sheet)", exportColumns, buildExportRows(), "calibration-standards.pdf")
+            }
+          >
+            <FileText size={14} /> PDF
+          </Button>
+          <Button variant="secondary" size="sm" onClick={addRow}>
+            <Plus size={14} /> Add row
+          </Button>
+        </div>
       </div>
 
       <div className="mt-4 overflow-x-auto">

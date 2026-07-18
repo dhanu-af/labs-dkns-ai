@@ -1,6 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { FlaskConical } from "lucide-react";
+import { Card } from "@/components/ui/Card";
+import { IconTile } from "@/components/ui/IconTile";
+import { Input } from "@/components/ui/Input";
 
 // mass (g) = molarity (mol/L) * volume (L) * molar mass (g/mol)
 export function MolarityCalculator() {
@@ -15,26 +19,24 @@ export function MolarityCalculator() {
   const molarity = valid ? massG / mm / volumeL : null;
 
   return (
-    <div className="rounded-lg border border-black/10 p-4 dark:border-white/10">
-      <h3 className="font-medium">Molarity</h3>
-      <div className="mt-3 grid grid-cols-3 gap-3 text-sm">
-        <label className="flex flex-col gap-1">
-          Mass (g)
-          <input value={mass} onChange={(e) => setMass(e.target.value)} className="rounded-md border border-black/15 bg-transparent px-2 py-1 dark:border-white/20" />
-        </label>
-        <label className="flex flex-col gap-1">
-          Molar mass (g/mol)
-          <input value={molarMass} onChange={(e) => setMolarMass(e.target.value)} className="rounded-md border border-black/15 bg-transparent px-2 py-1 dark:border-white/20" />
-        </label>
-        <label className="flex flex-col gap-1">
-          Volume (mL)
-          <input value={volumeMl} onChange={(e) => setVolumeMl(e.target.value)} className="rounded-md border border-black/15 bg-transparent px-2 py-1 dark:border-white/20" />
-        </label>
+    <Card>
+      <div className="flex items-center gap-3">
+        <IconTile size="sm" gradient="linear-gradient(135deg, #6366f1 0%, #3b82f6 100%)">
+          <FlaskConical size={16} />
+        </IconTile>
+        <h3 className="font-semibold text-slate-900 dark:text-white">Molarity</h3>
       </div>
-      <p className="mt-3 text-sm">
-        <span className="text-black/50 dark:text-white/50">Molarity = </span>
-        <span className="font-medium">{molarity !== null ? `${molarity.toPrecision(4)} mol/L` : "—"}</span>
+      <div className="mt-4 grid grid-cols-3 gap-3">
+        <Input label="Mass (g)" value={mass} onChange={(e) => setMass(e.target.value)} />
+        <Input label="Molar mass (g/mol)" value={molarMass} onChange={(e) => setMolarMass(e.target.value)} />
+        <Input label="Volume (mL)" value={volumeMl} onChange={(e) => setVolumeMl(e.target.value)} />
+      </div>
+      <p className="mt-4 text-sm">
+        <span className="text-slate-500 dark:text-white/50">Molarity = </span>
+        <span className="font-semibold text-slate-900 dark:text-white">
+          {molarity !== null ? `${molarity.toPrecision(4)} mol/L` : "—"}
+        </span>
       </p>
-    </div>
+    </Card>
   );
 }

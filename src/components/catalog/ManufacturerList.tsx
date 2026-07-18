@@ -22,12 +22,15 @@ export function ManufacturerList({ manufacturers }: { manufacturers: Prisma.Json
   if (entries.length === 0) return null;
 
   return (
-    <ul className="space-y-2">
+    <ul className="grid gap-2 sm:grid-cols-2">
       {entries.map((entry) => (
-        <li key={entry.name} className="rounded-lg border border-black/10 p-3 dark:border-white/10">
-          <p className="font-medium">{entry.name}</p>
+        <li
+          key={entry.name}
+          className="rounded-xl border border-slate-900/[0.07] bg-slate-50 p-3 dark:border-white/10 dark:bg-white/[0.02]"
+        >
+          <p className="font-medium text-slate-900 dark:text-white">{entry.name}</p>
           {entry.models && entry.models.length > 0 && (
-            <p className="mt-0.5 text-sm text-black/60 dark:text-white/60">{entry.models.join(", ")}</p>
+            <p className="mt-0.5 text-sm text-slate-600 dark:text-white/60">{entry.models.join(", ")}</p>
           )}
         </li>
       ))}

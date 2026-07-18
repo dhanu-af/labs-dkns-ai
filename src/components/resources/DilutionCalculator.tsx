@@ -1,6 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { Droplets } from "lucide-react";
+import { Card } from "@/components/ui/Card";
+import { IconTile } from "@/components/ui/IconTile";
+import { Input } from "@/components/ui/Input";
 
 // C1V1 = C2V2, solving for whichever field is left blank.
 export function DilutionCalculator() {
@@ -21,37 +25,32 @@ export function DilutionCalculator() {
   }
 
   return (
-    <div className="rounded-lg border border-black/10 p-4 dark:border-white/10">
-      <h3 className="font-medium">Dilution (C₁V₁ = C₂V₂)</h3>
-      <p className="mt-1 text-xs text-black/50 dark:text-white/50">Leave exactly one field blank to solve for it.</p>
-      <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-        <label className="flex flex-col gap-1">
-          C1 (stock conc.)
-          <input value={c1} onChange={(e) => setC1(e.target.value)} className="rounded-md border border-black/15 bg-transparent px-2 py-1 dark:border-white/20" />
-        </label>
-        <label className="flex flex-col gap-1">
-          V1 (stock volume)
-          <input value={v1} onChange={(e) => setV1(e.target.value)} className="rounded-md border border-black/15 bg-transparent px-2 py-1 dark:border-white/20" />
-        </label>
-        <label className="flex flex-col gap-1">
-          C2 (final conc.)
-          <input value={c2} onChange={(e) => setC2(e.target.value)} className="rounded-md border border-black/15 bg-transparent px-2 py-1 dark:border-white/20" />
-        </label>
-        <label className="flex flex-col gap-1">
-          V2 (final volume)
-          <input value={v2} onChange={(e) => setV2(e.target.value)} className="rounded-md border border-black/15 bg-transparent px-2 py-1 dark:border-white/20" />
-        </label>
+    <Card>
+      <div className="flex items-center gap-3">
+        <IconTile size="sm" gradient="linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%)">
+          <Droplets size={16} />
+        </IconTile>
+        <h3 className="font-semibold text-slate-900 dark:text-white">Dilution (C₁V₁ = C₂V₂)</h3>
       </div>
-      <p className="mt-3 text-sm">
+      <p className="mt-1.5 text-xs text-slate-500 dark:text-white/50">Leave exactly one field blank to solve for it.</p>
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <Input label="C1 (stock conc.)" value={c1} onChange={(e) => setC1(e.target.value)} />
+        <Input label="V1 (stock volume)" value={v1} onChange={(e) => setV1(e.target.value)} />
+        <Input label="C2 (final conc.)" value={c2} onChange={(e) => setC2(e.target.value)} />
+        <Input label="V2 (final volume)" value={v2} onChange={(e) => setV2(e.target.value)} />
+      </div>
+      <p className="mt-4 text-sm">
         {result ? (
           <>
-            <span className="text-black/50 dark:text-white/50">{result.label} = </span>
-            <span className="font-medium">{Number.isFinite(result.value) ? result.value.toPrecision(4) : "—"}</span>
+            <span className="text-slate-500 dark:text-white/50">{result.label} = </span>
+            <span className="font-semibold text-slate-900 dark:text-white">
+              {Number.isFinite(result.value) ? result.value.toPrecision(4) : "—"}
+            </span>
           </>
         ) : (
-          <span className="text-black/40 dark:text-white/40">Leave one field blank to see the result.</span>
+          <span className="text-slate-400 dark:text-white/40">Leave one field blank to see the result.</span>
         )}
       </p>
-    </div>
+    </Card>
   );
 }

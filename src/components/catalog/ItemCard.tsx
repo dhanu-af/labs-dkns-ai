@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { Card } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
 
 export function ItemCard({
   href,
@@ -12,15 +13,16 @@ export function ItemCard({
   tag?: string;
 }) {
   return (
-    <Link
-      href={href}
-      className="rounded-lg border border-black/10 p-4 transition hover:border-black/30 hover:bg-black/[0.02] dark:border-white/10 dark:hover:border-white/30 dark:hover:bg-white/[0.03]"
-    >
+    <Card href={href}>
       {tag && (
-        <p className="mb-1 text-xs font-medium uppercase tracking-wide text-black/40 dark:text-white/40">{tag}</p>
+        <div className="mb-2">
+          <Badge tone="info">{tag}</Badge>
+        </div>
       )}
-      <p className="font-medium">{title}</p>
-      <p className="mt-1 line-clamp-2 text-sm text-black/60 dark:text-white/60">{summary}</p>
-    </Link>
+      <p className="font-semibold text-slate-900 group-hover:text-indigo-600 dark:text-white dark:group-hover:text-violet-400">
+        {title}
+      </p>
+      <p className="mt-1.5 line-clamp-2 text-sm text-slate-600 dark:text-white/55">{summary}</p>
+    </Card>
   );
 }

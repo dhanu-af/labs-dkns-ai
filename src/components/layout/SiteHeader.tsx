@@ -2,6 +2,7 @@ import Link from "next/link";
 import { primaryNav, siteName } from "@/lib/site-config";
 import { SearchBar } from "@/components/layout/SearchBar";
 import { LogoutButton } from "@/components/layout/LogoutButton";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function SiteHeader() {
   return (
@@ -31,6 +32,7 @@ export function SiteHeader() {
           >
             Admin
           </Link>
+          <ThemeToggle />
           <LogoutButton />
         </div>
         <nav className="-mx-2 flex flex-wrap gap-1 overflow-x-auto text-sm">

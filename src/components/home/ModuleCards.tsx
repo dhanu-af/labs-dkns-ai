@@ -1,8 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { PhaseBadge } from "@/components/ui/PhaseBadge";
+import { Card } from "@/components/ui/Card";
+import { IconTile } from "@/components/ui/IconTile";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { fadeUpItem, staggerContainer } from "@/components/motion/variants";
 import type { Phase } from "@/lib/site-config";
 
 interface Module {
@@ -81,41 +84,26 @@ const modules: Module[] = [
   },
 ];
 
-const container: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
-};
-
-const item: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
-};
-
 export function ModuleCards() {
   return (
     <section className="mx-auto max-w-6xl px-6 py-16">
-      <div className="mx-auto max-w-xl text-center">
-        <h2 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-white">
-          Explore the platform
-        </h2>
-        <p className="mt-2 text-slate-600 dark:text-white/60">
-          Everything you need, organized the way a lab actually runs.
-        </p>
-      </div>
+      <SectionHeading
+        centered
+        title="Explore the platform"
+        description="Everything you need, organized the way a lab actually runs."
+        className="mx-auto max-w-xl"
+      />
 
       <motion.div
-        variants={container}
+        variants={staggerContainer(0.08)}
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: "-80px" }}
         className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
       >
         {modules.map((mod) => (
-          <motion.div key={mod.href} variants={item} whileHover={{ y: -4 }} className="app-ring-wrap h-full">
-            <Link
-              href={mod.href}
-              className="app-ring-inner app-card-hover group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-900/[0.07] bg-white p-5 dark:border-white/10 dark:bg-white/[0.03]"
-            >
+          <motion.div key={mod.href} variants={fadeUpItem} whileHover={{ y: -4 }} className="h-full">
+            <Card href={mod.href} className="group">
               {mod.phase !== 1 && (
                 <div className="absolute right-4 top-4">
                   <PhaseBadge phase={mod.phase} />
@@ -124,12 +112,13 @@ export function ModuleCards() {
               <motion.span
                 whileHover={{ rotate: -6, scale: 1.12 }}
                 transition={{ type: "spring", stiffness: 350, damping: 15 }}
-                className="flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-sm"
-                style={{ background: mod.gradient }}
+                className="inline-block"
               >
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                  {mod.icon}
-                </svg>
+                <IconTile gradient={mod.gradient}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    {mod.icon}
+                  </svg>
+                </IconTile>
               </motion.span>
               <p className="mt-4 font-semibold text-slate-900 dark:text-white">{mod.title}</p>
               <p className="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-white/55">{mod.description}</p>
@@ -139,7 +128,7 @@ export function ModuleCards() {
                   <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-            </Link>
+            </Card>
           </motion.div>
         ))}
       </motion.div>

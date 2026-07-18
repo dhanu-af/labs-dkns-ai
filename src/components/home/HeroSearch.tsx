@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { SearchBar } from "@/components/layout/SearchBar";
+import { Button } from "@/components/ui/Button";
+import { EASE_STANDARD } from "@/components/motion/variants";
 
 const quickLinks = [
   { label: "Browse Equipment", href: "/equipment" },
@@ -13,7 +14,8 @@ const quickLinks = [
 export function HeroSearch() {
   return (
     <section className="relative overflow-hidden border-b border-slate-900/[0.06] px-6 py-24 sm:py-28 dark:border-white/10">
-      {/* Animated aurora + dot-grid background */}
+      {/* Animated aurora + dot-grid background -- the hero's one deliberately
+          rich moment; glass/noise elsewhere on the page stay subtle. */}
       <div className="pointer-events-none absolute inset-0 bg-slate-50 dark:bg-[#0b0d14]">
         <div
           className="aurora-blob aurora-blob-1"
@@ -46,14 +48,14 @@ export function HeroSearch() {
           }}
         />
         <div className="app-dot-grid absolute inset-0" />
-        <div className="app-noise absolute inset-0" />
+        <div className="app-noise absolute inset-0 opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-50 dark:to-[#0b0d14]" />
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.6, ease: EASE_STANDARD }}
         className="relative mx-auto max-w-3xl text-center"
       >
         <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-900/[0.08] bg-white/70 px-3 py-1 text-xs font-medium text-slate-600 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/[0.06] dark:text-white/70">
@@ -74,7 +76,7 @@ export function HeroSearch() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6, delay: 0.15, ease: EASE_STANDARD }}
           className="mx-auto mt-9 max-w-xl"
         >
           <SearchBar />
@@ -83,17 +85,18 @@ export function HeroSearch() {
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6, delay: 0.25, ease: EASE_STANDARD }}
           className="mt-7 flex flex-wrap items-center justify-center gap-3 text-sm"
         >
           {quickLinks.map((link) => (
             <motion.div key={link.href} whileHover={{ y: -2, scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <Link
+              <Button
                 href={link.href}
-                className="app-pill inline-block rounded-full border border-slate-900/[0.08] bg-white/70 px-4 py-1.5 font-medium text-slate-700 shadow-sm backdrop-blur transition hover:border-indigo-300/60 hover:bg-white hover:text-indigo-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/75 dark:hover:border-violet-400/40 dark:hover:bg-white/[0.08] dark:hover:text-white"
+                variant="secondary"
+                className="border-slate-900/[0.08] bg-white/70 text-slate-700 shadow-sm backdrop-blur hover:border-indigo-300/60 hover:bg-white hover:text-indigo-600 dark:bg-white/[0.04] dark:text-white/75 dark:hover:border-violet-400/40 dark:hover:bg-white/[0.08] dark:hover:text-white"
               >
                 {link.label}
-              </Link>
+              </Button>
             </motion.div>
           ))}
         </motion.div>

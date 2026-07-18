@@ -1,19 +1,83 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Semantic surfaces */
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-sunken: #f8fafc;
+  --color-surface-footer: #0f1117;
+  --color-border-subtle: rgb(15 23 42 / 0.07);
+  --color-border-strong: rgb(15 23 42 / 0.14);
+  --color-text-secondary: rgb(15 23 42 / 0.62);
+  --color-text-tertiary: rgb(15 23 42 / 0.42);
+
+  /* App-shell brand triad (indigo -> violet -> pink) */
+  --brand-1: #6366f1;
+  --brand-2: #8b5cf6;
+  --brand-3: #ec4899;
+
+  /* Login "gate" triad (emerald -> teal -> blue), deliberately distinct */
+  --gate-1: #10b981;
+  --gate-2: #2dd4bf;
+  --gate-3: #3b82f6;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+
+  --shadow-card-hover: 0 20px 40px -20px rgb(79 70 229 / 0.25);
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  --color-surface: #0b0d14;
+  --color-surface-elevated: rgb(255 255 255 / 0.03);
+  --color-surface-sunken: #0b0d14;
+  --color-border-subtle: rgb(255 255 255 / 0.1);
+  --color-border-strong: rgb(255 255 255 / 0.18);
+  --color-text-secondary: rgb(255 255 255 / 0.65);
+  --color-text-tertiary: rgb(255 255 255 / 0.45);
+
+  --shadow-card-hover: 0 20px 40px -20px rgb(139 92 246 / 0.35);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--color-surface);
+  --color-surface-elevated: var(--color-surface-elevated);
+  --color-surface-sunken: var(--color-surface-sunken);
+  --color-surface-footer: var(--color-surface-footer);
+  --color-border-subtle: var(--color-border-subtle);
+  --color-border-strong: var(--color-border-strong);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-tertiary: var(--color-text-tertiary);
+  --color-brand-1: var(--brand-1);
+  --color-brand-2: var(--brand-2);
+  --color-brand-3: var(--brand-3);
+  --color-gate-1: var(--gate-1);
+  --color-gate-2: var(--gate-2);
+  --color-gate-3: var(--gate-3);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+/* Kept as a fallback for the brief pre-hydration window before next-themes
+   applies its .light/.dark class (defaultTheme="system"). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light):not(.dark) {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
@@ -22,7 +86,12 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+h1, h2, h3, h4 {
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 /* ------------------------------------------------------------------ */
@@ -166,8 +235,12 @@ body {
      declared inside a plain class rule here. */
 }
 
+.dark .app-glass-header {
+  background: rgba(10, 10, 14, 0.6);
+}
+
 @media (prefers-color-scheme: dark) {
-  .app-glass-header {
+  :root:not(.light):not(.dark) .app-glass-header {
     background: rgba(10, 10, 14, 0.6);
   }
 }
@@ -177,8 +250,12 @@ body {
   background-size: 24px 24px;
 }
 
+.dark .app-dot-grid {
+  background-image: radial-gradient(rgba(139, 92, 246, 0.18) 1px, transparent 1px);
+}
+
 @media (prefers-color-scheme: dark) {
-  .app-dot-grid {
+  :root:not(.light):not(.dark) .app-dot-grid {
     background-image: radial-gradient(rgba(139, 92, 246, 0.18) 1px, transparent 1px);
   }
 }
@@ -192,8 +269,12 @@ body {
   box-shadow: 0 20px 40px -20px rgba(79, 70, 229, 0.25);
 }
 
+.dark .app-card-hover:hover {
+  box-shadow: 0 20px 40px -20px rgba(139, 92, 246, 0.35);
+}
+
 @media (prefers-color-scheme: dark) {
-  .app-card-hover:hover {
+  :root:not(.light):not(.dark) .app-card-hover:hover {
     box-shadow: 0 20px 40px -20px rgba(139, 92, 246, 0.35);
   }
 }
@@ -214,8 +295,12 @@ body {
   box-shadow: 0 8px 30px -8px rgba(79, 70, 229, 0.18), 0 2px 8px -2px rgba(15, 23, 42, 0.08);
 }
 
+.dark .app-search-shadow {
+  box-shadow: 0 8px 30px -8px rgba(139, 92, 246, 0.28), 0 2px 8px -2px rgba(0, 0, 0, 0.4);
+}
+
 @media (prefers-color-scheme: dark) {
-  .app-search-shadow {
+  :root:not(.light):not(.dark) .app-search-shadow {
     box-shadow: 0 8px 30px -8px rgba(139, 92, 246, 0.28), 0 2px 8px -2px rgba(0, 0, 0, 0.4);
   }
 }

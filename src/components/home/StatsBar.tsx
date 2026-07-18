@@ -31,7 +31,16 @@ export function StatsBar({ stats }: { stats: SiteStats }) {
             variants={fadeUpItem}
             className="rounded-2xl border border-slate-900/[0.07] bg-white/60 p-5 text-center dark:border-white/10 dark:bg-white/[0.03]"
           >
-            <p className="app-hero-glow bg-clip-text text-3xl font-bold text-transparent sm:text-4xl">
+            <p
+              className="text-3xl font-bold sm:text-4xl"
+              style={{
+                backgroundImage: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
               <AnimatedCounter value={stats[tile.key]} suffix="+" />
             </p>
             <p className="mt-1.5 text-sm text-slate-600 dark:text-white/60">{tile.label}</p>

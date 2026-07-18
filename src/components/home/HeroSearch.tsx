@@ -66,7 +66,22 @@ export function HeroSearch() {
         <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-900 sm:text-6xl dark:text-white">
           Everything your lab
           <br />
-          <span className="app-hero-glow bg-clip-text text-transparent">needs to know</span>
+          {/* gradient-clipped text via inline style, not `bg-clip-text` -- the
+              production CSS pipeline (Tailwind v4 / Lightning CSS) drops
+              background-clip here the same way it drops backdrop-filter
+              elsewhere in this app, rendering an opaque gradient block with
+              invisible text instead of clipped gradient text. */}
+          <span
+            style={{
+              backgroundImage: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)",
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              color: "transparent",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            needs to know
+          </span>
         </h1>
 
         <p className="mx-auto mt-5 max-w-xl text-balance text-base text-slate-600 sm:text-lg dark:text-white/60">

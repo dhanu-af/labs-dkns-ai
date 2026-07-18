@@ -291,6 +291,13 @@ h1, h2, h3, h4 {
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
 }
 
+/* Do not pair .app-hero-glow with Tailwind's bg-clip-text for gradient text --
+   the production CSS pipeline silently drops background-clip here (same
+   failure mode as the backdrop-filter bug above), rendering an opaque
+   gradient block over invisible text. Build gradient text with the same
+   gradient values via an inline style prop instead (see HeroSearch.tsx /
+   StatsBar.tsx). */
+
 .app-search-shadow {
   box-shadow: 0 8px 30px -8px rgba(79, 70, 229, 0.18), 0 2px 8px -2px rgba(15, 23, 42, 0.08);
 }

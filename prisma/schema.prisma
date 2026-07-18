@@ -284,3 +284,54 @@ model GlossaryTerm {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// ---------------------------------------------------------------------------
+// Ask Nanduni — rule-based knowledge-base Q&A (not an LLM call: a curated
+// KB scored against the question by keyword/token overlap, same mechanism as
+// "Dhanu AI" on the BlendCaps Ops Platform, adapted for lab content).
+// ---------------------------------------------------------------------------
+
+enum KbCategory {
+  EQUIPMENT_TROUBLESHOOTING
+  METHOD_TROUBLESHOOTING
+  CALIBRATION
+  SAMPLE_PREP
+  QUALITY_CONTROL
+  METHOD_DEVELOPMENT
+  GMP_GLP_COMPLIANCE
+  SAFETY
+  DATA_ANALYSIS
+  GENERAL
+}
+
+model KnowledgeEntry {
+  id       String     @id @default(cuid())
+  slug     String     @unique
+  category KbCategory
+  title    String
+  keywords String
+  cause    String?
+  answer   String
+  source   String?
+  order    Int        @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+}
+
+// One row per question asked, so admins can see what's being asked (and
+// with what confidence) to prioritize expanding the knowledge base.
+model KbQuestionLog {
+  id          String   @id @default(cuid())
+  question    String
+  matchedId   String?
+  matchTitle  String?
+  matchScore  Float?
+  askedByName String
+
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}

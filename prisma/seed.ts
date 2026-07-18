@@ -424,6 +424,128 @@ async function main() {
     });
   }
 
+  // -------------------------------------------------------------------
+  // Ask Nanduni — knowledge base entries (rule-based Q&A, not an LLM)
+  // -------------------------------------------------------------------
+  const kbEntries: {
+    slug: string;
+    category:
+      | "EQUIPMENT_TROUBLESHOOTING"
+      | "METHOD_TROUBLESHOOTING"
+      | "CALIBRATION"
+      | "SAMPLE_PREP"
+      | "QUALITY_CONTROL"
+      | "METHOD_DEVELOPMENT"
+      | "GMP_GLP_COMPLIANCE"
+      | "SAFETY"
+      | "DATA_ANALYSIS"
+      | "GENERAL";
+    title: string;
+    keywords: string;
+    cause?: string;
+    answer: string;
+    source?: string;
+  }[] = [
+    {
+      slug: "hplc-peak-tailing",
+      category: "EQUIPMENT_TROUBLESHOOTING",
+      title: "HPLC peak is tailing",
+      keywords: "hplc, peak, tailing, chromatography, column, retention",
+      cause: "Column degradation, a poor pH match between the mobile phase and analyte, or dead volume in the flow path.",
+      answer:
+        "Peak tailing most often points to a degraded or contaminated column — try flushing with a strong solvent or replacing the guard cartridge first. If tailing persists, check that your mobile phase pH is well away from the analyte's pKa, and inspect fittings for dead volume (loose ferrules, mismatched tubing bore).",
+      source: "HPLC Analysis method guide",
+    },
+    {
+      slug: "uv-vis-absorbance-out-of-range",
+      category: "METHOD_TROUBLESHOOTING",
+      title: "UV-Vis absorbance reading is out of range",
+      keywords: "uv-vis, absorbance, out of range, linear range, dilute, beer-lambert",
+      cause: "Absorbance above roughly 1.5 Abs falls outside the linear range of the Beer-Lambert law.",
+      answer:
+        "Dilute the sample and re-measure rather than trusting a high-absorbance reading — accuracy degrades sharply above ~1.5 Abs. Also check the cuvette for scratches or fingerprints, which scatter light and inflate the apparent absorbance.",
+      source: "UV-Vis Spectrophotometry method guide",
+    },
+    {
+      slug: "analytical-balance-calibration-frequency",
+      category: "CALIBRATION",
+      title: "How often should I calibrate the analytical balance?",
+      keywords: "balance, calibration, schedule, certified weights, analytical, frequency",
+      answer:
+        "Do a quick check-weight verification with a certified reference weight at the start of each day of use, and a full calibration (including linearity and repeatability checks) on a routine schedule — quarterly is typical, though a formal ISO/IEC 17025 program will specify the exact interval based on usage and drift history.",
+      source: "Analytical Balance equipment guide / ISO/IEC 17025",
+    },
+    {
+      slug: "avoiding-matrix-effects",
+      category: "SAMPLE_PREP",
+      title: "How do I avoid matrix effects in sample prep?",
+      keywords: "matrix effect, sample prep, dilution, extraction, interference",
+      answer:
+        "Match your calibration standards to the sample matrix wherever possible rather than using pure-solvent standards. Diluting the sample (\"dilute and shoot\") reduces matrix interference at the cost of sensitivity; for matrices you can't dilute away, the standard addition method spikes known amounts of analyte into the actual sample matrix to calibrate against.",
+    },
+    {
+      slug: "lod-vs-loq",
+      category: "QUALITY_CONTROL",
+      title: "What's the difference between LOD and LOQ?",
+      keywords: "lod, loq, limit of detection, limit of quantitation, quality control",
+      answer:
+        "LOD (Limit of Detection) is the lowest concentration that can be reliably distinguished from background noise — it tells you something is there, not how much. LOQ (Limit of Quantitation) is higher, typically about 3x the LOD, and is the lowest concentration that can be measured with acceptable precision and accuracy for reporting a value.",
+      source: "Glossary — Limit of Detection (LOD)",
+    },
+    {
+      slug: "choosing-hplc-column",
+      category: "METHOD_DEVELOPMENT",
+      title: "How do I choose an HPLC column for a new method?",
+      keywords: "hplc, column selection, method development, stationary phase, c18",
+      answer:
+        "Start from the analyte's polarity and pKa: a C18 reversed-phase column covers most small-molecule work, while more polar analytes may need HILIC. Smaller particle sizes improve resolution and speed but increase backpressure, so match particle size to what your pump can handle. Once selected, verify system suitability against USP <621> before validating the method.",
+      source: "USP <621> Chromatography",
+    },
+    {
+      slug: "gmp-documentation-basics",
+      category: "GMP_GLP_COMPLIANCE",
+      title: "What documentation do I need for GMP compliance?",
+      keywords: "gmp, glp, documentation, compliance, audit trail, alcoa",
+      answer:
+        "At minimum: signed and dated SOPs for every procedure, equipment calibration/maintenance logs, raw data retained with a full audit trail (who, what, when, why for any change), and deviation/CAPA records for anything that didn't go to plan. Follow ALCOA+ principles (Attributable, Legible, Contemporaneous, Original, Accurate, plus Complete/Consistent/Enduring/Available) for every record.",
+    },
+    {
+      slug: "ppe-before-handling-solvents",
+      category: "SAFETY",
+      title: "What PPE do I need before handling solvents?",
+      keywords: "ppe, solvents, safety, gloves, fume hood, chemical handling",
+      answer:
+        "Chemical-resistant nitrile gloves, safety glasses or goggles, and a lab coat are the baseline. Work inside a fume hood for anything volatile, and always check the SDS for the specific solvent — some (e.g. certain chlorinated solvents) need a different glove material than standard nitrile.",
+      source: "PPE Guidelines / Chemical Handling & Storage",
+    },
+    {
+      slug: "calculating-percent-rsd",
+      category: "DATA_ANALYSIS",
+      title: "How do I calculate %RSD for replicate measurements?",
+      keywords: "rsd, relative standard deviation, statistics, replicates, precision",
+      answer:
+        "%RSD = (standard deviation ÷ mean) × 100, calculated across your replicate measurements. It's a quick way to express precision independent of the measurement's absolute scale. The Statistics & Uncertainty calculator on the Resources > Calculators page computes this automatically from a pasted list of values.",
+      source: "Resources — Statistics & Uncertainty calculator",
+    },
+    {
+      slug: "what-does-dkns-labs-cover",
+      category: "GENERAL",
+      title: "What does DKNS Labs cover?",
+      keywords: "about, dkns labs, overview, general, what is this",
+      answer:
+        "DKNS Labs is a reference hub for lab equipment, methods, SOPs, and lab management guidance — Equipment & Instruments, Methods & Techniques, Safety & Compliance, and a Resources section with calculators, converters, a glossary, and the standards library, with SOPs and Lab Management depth arriving in later phases.",
+      source: "About DKNS Labs",
+    },
+  ];
+
+  for (const entry of kbEntries) {
+    await prisma.knowledgeEntry.upsert({
+      where: { slug: entry.slug },
+      update: {},
+      create: entry,
+    });
+  }
+
   console.log("Seed complete.");
 }
 

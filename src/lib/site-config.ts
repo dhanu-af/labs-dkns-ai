@@ -20,6 +20,7 @@ export const primaryNav: NavItem[] = [
   { label: "Lab Management", href: "/lab-management", phase: 2, description: "Quality systems, operations, finance, and personnel" },
   { label: "Safety & Compliance", href: "/safety", phase: 1, description: "General lab safety, regulatory standards, waste management" },
   { label: "Resources", href: "/resources", phase: 1, description: "Converters, calculators, glossary, templates, standards library" },
+  { label: "Ask Nanduni", href: "/ask-nanduni", phase: 1, description: "Ask Nanduni AI — instant answers on methods, equipment, calibration, and compliance" },
   { label: "Blog", href: "/blog", phase: 3, description: "Industry trends, new equipment, regulatory updates, case studies" },
   { label: "Directory", href: "/directory", phase: 3, description: "Manufacturers, testing bodies, and training providers" },
 ];

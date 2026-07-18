@@ -8,6 +8,7 @@ const sections = [
   { label: "Glossary", href: "/admin/glossary" },
   { label: "Standards", href: "/admin/standards" },
   { label: "Safety Guides", href: "/admin/safety" },
+  { label: "Knowledge Base", href: "/admin/knowledge-base" },
 ];
 
 export async function AdminNav() {

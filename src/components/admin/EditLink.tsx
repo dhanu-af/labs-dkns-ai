@@ -1,6 +1,10 @@
 import Link from "next/link";
+import { getSession, canEditContent } from "@/lib/auth";
 
-export function EditLink({ href }: { href: string }) {
+export async function EditLink({ href }: { href: string }) {
+  const session = await getSession();
+  if (!session || !canEditContent(session.role)) return null;
+
   return (
     <Link
       href={href}

@@ -44,7 +44,7 @@ function AnswerCard({ match, highlight }: { match: KbMatch; highlight?: boolean 
   );
 }
 
-export function AskNanduniClient() {
+export function AskNanduniClient({ canManageKb }: { canManageKb: boolean }) {
   const [question, setQuestion] = useState("");
   const [pending, startTransition] = useTransition();
   const [result, setResult] = useState<{ matches: KbMatch[]; confident: boolean } | null>(null);
@@ -130,11 +130,13 @@ export function AskNanduniClient() {
         </div>
       )}
 
-      <p className="text-sm text-slate-500 dark:text-white/50">
-        <Link href="/admin/knowledge-base" className="font-medium text-indigo-600 hover:text-indigo-700 dark:text-violet-400 dark:hover:text-violet-300">
-          Manage knowledge base →
-        </Link>
-      </p>
+      {canManageKb && (
+        <p className="text-sm text-slate-500 dark:text-white/50">
+          <Link href="/admin/knowledge-base" className="font-medium text-indigo-600 hover:text-indigo-700 dark:text-violet-400 dark:hover:text-violet-300">
+            Manage knowledge base →
+          </Link>
+        </p>
+      )}
     </div>
   );
 }

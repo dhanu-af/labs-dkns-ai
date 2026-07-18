@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireSession, isSuperAdmin } from "@/lib/auth";
 import { deleteUserAccount } from "@/lib/actions/user-actions";
 import { DeleteButton } from "@/components/admin/DeleteButton";
+import { ResetPasswordForm } from "@/components/admin/ResetPasswordForm";
 
 export const metadata: Metadata = { title: "Admin — Users" };
 export const dynamic = "force-dynamic";
@@ -44,13 +45,16 @@ export default async function AdminUsersPage({
                 {u.id === session.userId && <span className="ml-2 text-xs text-slate-400">(you)</span>}
               </p>
               <p className="text-xs text-slate-500 dark:text-white/50">
-                {u.role === "SUPER_ADMIN" ? "Super admin" : "Editor"}
+                {u.role === "SUPER_ADMIN" ? "Super admin" : u.role === "VIEWER" ? "Viewer" : "Editor"}
               </p>
             </div>
-            <DeleteButton
-              action={deleteUserAccount.bind(null, u.id)}
-              confirmLabel={`Delete the account "${u.username}"? This cannot be undone.`}
-            />
+            <div className="flex items-center gap-2">
+              <ResetPasswordForm userId={u.id} />
+              <DeleteButton
+                action={deleteUserAccount.bind(null, u.id)}
+                confirmLabel={`Delete the account "${u.username}"? This cannot be undone.`}
+              />
+            </div>
           </div>
         ))}
       </div>

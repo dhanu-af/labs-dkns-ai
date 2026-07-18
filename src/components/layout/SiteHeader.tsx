@@ -8,9 +8,15 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { IconTile } from "@/components/ui/IconTile";
 import { listEquipmentCategories } from "@/lib/content/equipment";
 import { listMethodCategories } from "@/lib/content/methods";
+import { getSession, isViewer } from "@/lib/auth";
 
 export async function SiteHeader() {
-  const [equipmentTree, methodTree] = await Promise.all([listEquipmentCategories(), listMethodCategories()]);
+  const [equipmentTree, methodTree, session] = await Promise.all([
+    listEquipmentCategories(),
+    listMethodCategories(),
+    getSession(),
+  ]);
+  const showAdminLink = !!session && !isViewer(session.role);
 
   return (
     <header
@@ -28,12 +34,14 @@ export async function SiteHeader() {
           <div className="hidden w-full max-w-md md:block">
             <SearchBar compact />
           </div>
-          <Link
-            href="/admin"
-            className="app-pill hidden shrink-0 rounded-full border border-slate-900/[0.08] px-3.5 py-1.5 text-sm font-medium text-slate-600 hover:border-slate-900/15 hover:bg-slate-900/[0.04] hover:text-slate-900 sm:inline-block dark:border-white/10 dark:text-white/60 dark:hover:border-white/20 dark:hover:bg-white/10 dark:hover:text-white"
-          >
-            Admin
-          </Link>
+          {showAdminLink && (
+            <Link
+              href="/admin"
+              className="app-pill hidden shrink-0 rounded-full border border-slate-900/[0.08] px-3.5 py-1.5 text-sm font-medium text-slate-600 hover:border-slate-900/15 hover:bg-slate-900/[0.04] hover:text-slate-900 sm:inline-block dark:border-white/10 dark:text-white/60 dark:hover:border-white/20 dark:hover:bg-white/10 dark:hover:text-white"
+            >
+              Admin
+            </Link>
+          )}
           <ThemeToggle />
           <LogoutButton />
           <MobileNav />

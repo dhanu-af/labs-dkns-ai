@@ -14,10 +14,21 @@ export type SessionPayload = {
   userId: string;
   username: string;
   role: UserRole;
+  mustChangePassword: boolean;
 };
 
 export function isSuperAdmin(role: UserRole) {
   return role === "SUPER_ADMIN";
+}
+
+export function isViewer(role: UserRole) {
+  return role === "VIEWER";
+}
+
+// VIEWER can browse the site but cannot edit content, see /admin/* pages, or
+// download documents; SUPER_ADMIN and EDITOR both retain today's full access.
+export function canEditContent(role: UserRole) {
+  return role !== "VIEWER";
 }
 
 export async function hashPassword(password: string) {
@@ -66,7 +77,10 @@ export async function login(username: string, password: string, remember = false
   const valid = await bcrypt.compare(password, user.passwordHash);
   if (!valid) return { error: "Invalid User ID or password" as const };
 
-  await createSession({ userId: user.id, username: user.username, role: user.role }, remember);
+  await createSession(
+    { userId: user.id, username: user.username, role: user.role, mustChangePassword: user.mustChangePassword },
+    remember,
+  );
   return { ok: true as const };
 }
 
@@ -90,5 +104,14 @@ export async function requireSession(): Promise<SessionPayload> {
 export async function requireSuperAdmin(): Promise<SessionPayload> {
   const session = await requireSession();
   if (!isSuperAdmin(session.role)) throw new Error("Super admin access required");
+  return session;
+}
+
+// Content-mutating actions are open to EDITOR/SUPER_ADMIN, closed to VIEWER.
+// Same defense-in-depth rationale as requireSession() above: a mutating
+// action's form id is visible in rendered HTML and can be invoked directly.
+export async function requireEditorOrAbove(): Promise<SessionPayload> {
+  const session = await requireSession();
+  if (isViewer(session.role)) throw new Error("Editor access required");
   return session;
 }

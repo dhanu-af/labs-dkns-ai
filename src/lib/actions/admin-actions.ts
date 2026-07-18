@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { requireSession } from "@/lib/auth";
+import { requireEditorOrAbove } from "@/lib/auth";
 import { slugify } from "@/lib/slugify";
 import type { ContentStatus, GuideSection } from "@prisma/client";
 
@@ -28,7 +28,7 @@ function optionalString(raw: FormDataEntryValue | null): string | null {
 // ---------------------------------------------------------------------------
 
 export async function saveEquipment(_prevState: ActionState, formData: FormData): Promise<ActionState> {
-  await requireSession();
+  await requireEditorOrAbove();
 
   const id = optionalString(formData.get("id"));
   const name = String(formData.get("name") ?? "").trim();
@@ -75,7 +75,7 @@ export async function saveEquipment(_prevState: ActionState, formData: FormData)
 }
 
 export async function deleteEquipment(id: string) {
-  await requireSession();
+  await requireEditorOrAbove();
   await prisma.equipment.delete({ where: { id } });
   redirect("/admin/equipment");
 }
@@ -85,7 +85,7 @@ export async function deleteEquipment(id: string) {
 // ---------------------------------------------------------------------------
 
 export async function saveMethod(_prevState: ActionState, formData: FormData): Promise<ActionState> {
-  await requireSession();
+  await requireEditorOrAbove();
 
   const id = optionalString(formData.get("id"));
   const name = String(formData.get("name") ?? "").trim();
@@ -121,7 +121,7 @@ export async function saveMethod(_prevState: ActionState, formData: FormData): P
 }
 
 export async function deleteMethod(id: string) {
-  await requireSession();
+  await requireEditorOrAbove();
   await prisma.method.delete({ where: { id } });
   redirect("/admin/methods");
 }
@@ -131,7 +131,7 @@ export async function deleteMethod(id: string) {
 // ---------------------------------------------------------------------------
 
 export async function saveGlossaryTerm(_prevState: ActionState, formData: FormData): Promise<ActionState> {
-  await requireSession();
+  await requireEditorOrAbove();
 
   const id = optionalString(formData.get("id"));
   const term = String(formData.get("term") ?? "").trim();
@@ -158,7 +158,7 @@ export async function saveGlossaryTerm(_prevState: ActionState, formData: FormDa
 }
 
 export async function deleteGlossaryTerm(id: string) {
-  await requireSession();
+  await requireEditorOrAbove();
   await prisma.glossaryTerm.delete({ where: { id } });
   redirect("/admin/glossary");
 }
@@ -168,7 +168,7 @@ export async function deleteGlossaryTerm(id: string) {
 // ---------------------------------------------------------------------------
 
 export async function saveStandard(_prevState: ActionState, formData: FormData): Promise<ActionState> {
-  await requireSession();
+  await requireEditorOrAbove();
 
   const id = optionalString(formData.get("id"));
   const code = String(formData.get("code") ?? "").trim();
@@ -197,7 +197,7 @@ export async function saveStandard(_prevState: ActionState, formData: FormData):
 }
 
 export async function deleteStandard(id: string) {
-  await requireSession();
+  await requireEditorOrAbove();
   await prisma.standardReference.delete({ where: { id } });
   redirect("/admin/standards");
 }
@@ -207,7 +207,7 @@ export async function deleteStandard(id: string) {
 // ---------------------------------------------------------------------------
 
 export async function saveGuidePage(_prevState: ActionState, formData: FormData): Promise<ActionState> {
-  await requireSession();
+  await requireEditorOrAbove();
 
   const id = optionalString(formData.get("id"));
   const title = String(formData.get("title") ?? "").trim();
@@ -238,7 +238,7 @@ export async function saveGuidePage(_prevState: ActionState, formData: FormData)
 }
 
 export async function deleteGuidePage(id: string) {
-  await requireSession();
+  await requireEditorOrAbove();
   await prisma.guidePage.delete({ where: { id } });
   redirect("/admin/safety");
 }

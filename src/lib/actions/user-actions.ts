@@ -7,6 +7,8 @@ import type { UserRole } from "@prisma/client";
 
 type ActionState = { error?: string } | undefined;
 
+const VALID_ROLES: UserRole[] = ["SUPER_ADMIN", "EDITOR", "VIEWER"];
+
 export async function createUserAccount(_prevState: ActionState, formData: FormData): Promise<ActionState> {
   await requireSuperAdmin();
 
@@ -20,11 +22,15 @@ export async function createUserAccount(_prevState: ActionState, formData: FormD
   if (password.length < 8) {
     return { error: "Password must be at least 8 characters." };
   }
+  if (!VALID_ROLES.includes(role)) {
+    return { error: "Invalid role." };
+  }
 
   const passwordHash = await hashPassword(password);
 
   try {
-    await prisma.user.create({ data: { username, passwordHash, role } });
+    // New accounts must change this password on their first login.
+    await prisma.user.create({ data: { username, passwordHash, role, mustChangePassword: true } });
   } catch {
     return { error: "That username is already taken." };
   }
@@ -38,5 +44,25 @@ export async function deleteUserAccount(id: string) {
     redirect("/admin/users?error=self-delete");
   }
   await prisma.user.delete({ where: { id } });
+  redirect("/admin/users");
+}
+
+export async function resetUserPassword(_prevState: ActionState, formData: FormData): Promise<ActionState> {
+  await requireSuperAdmin();
+
+  const id = String(formData.get("id") ?? "");
+  const newPassword = String(formData.get("newPassword") ?? "");
+
+  if (!id) {
+    return { error: "Missing user." };
+  }
+  if (newPassword.length < 8) {
+    return { error: "Password must be at least 8 characters." };
+  }
+
+  const passwordHash = await hashPassword(newPassword);
+  // Force the user to set their own password again next time they log in.
+  await prisma.user.update({ where: { id }, data: { passwordHash, mustChangePassword: true } });
+
   redirect("/admin/users");
 }

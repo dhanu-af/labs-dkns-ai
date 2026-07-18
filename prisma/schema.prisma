@@ -15,15 +15,18 @@ datasource db {
 enum UserRole {
   SUPER_ADMIN
   EDITOR
+  VIEWER
 }
 
-// Every account can edit content; only SUPER_ADMIN can manage other accounts
-// (see requireSuperAdmin() in lib/auth.ts).
+// SUPER_ADMIN and EDITOR can edit content; only SUPER_ADMIN can manage other
+// accounts (see requireSuperAdmin() in lib/auth.ts). VIEWER is read-only: no
+// edit access, no /admin/* pages, no document downloads (requireEditorOrAbove()).
 model User {
-  id           String   @id @default(cuid())
-  username     String   @unique
-  passwordHash String
-  role         UserRole @default(EDITOR)
+  id                 String   @id @default(cuid())
+  username           String   @unique
+  passwordHash       String
+  role               UserRole @default(EDITOR)
+  mustChangePassword Boolean  @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

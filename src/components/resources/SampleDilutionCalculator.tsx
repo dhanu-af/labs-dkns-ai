@@ -94,7 +94,7 @@ const exportColumns: ExportColumn[] = [
   { header: "Upper PPB", key: "upperPpb" },
 ];
 
-export function SampleDilutionCalculator() {
+export function SampleDilutionCalculator({ canDownload }: { canDownload: boolean }) {
   const [rows, setRows] = useState<SampleRow[]>(initialRows);
 
   function buildExportRows() {
@@ -168,20 +168,24 @@ export function SampleDilutionCalculator() {
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => downloadExcel("Sample Dilution", exportColumns, buildExportRows(), "sample-dilution.xlsx")}
-          >
-            <FileSpreadsheet size={14} /> Excel
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => downloadPdf("Sample Dilution & Specification", exportColumns, buildExportRows(), "sample-dilution.pdf")}
-          >
-            <FileText size={14} /> PDF
-          </Button>
+          {canDownload && (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => downloadExcel("Sample Dilution", exportColumns, buildExportRows(), "sample-dilution.xlsx")}
+              >
+                <FileSpreadsheet size={14} /> Excel
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => downloadPdf("Sample Dilution & Specification", exportColumns, buildExportRows(), "sample-dilution.pdf")}
+              >
+                <FileText size={14} /> PDF
+              </Button>
+            </>
+          )}
           <Button variant="secondary" size="sm" onClick={addRow}>
             <Plus size={14} /> Add row
           </Button>

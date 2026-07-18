@@ -12,6 +12,7 @@ export default async function ProtectedLayout({
 }) {
   const session = await getSession();
   if (!session) redirect("/login");
+  if (session.mustChangePassword) redirect("/change-password");
 
   return (
     <MotionProvider>

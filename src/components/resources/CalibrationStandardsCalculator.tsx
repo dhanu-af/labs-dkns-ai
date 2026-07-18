@@ -68,7 +68,7 @@ const exportColumns: ExportColumn[] = [
   { header: "PPB", key: "ppb" },
 ];
 
-export function CalibrationStandardsCalculator() {
+export function CalibrationStandardsCalculator({ canDownload }: { canDownload: boolean }) {
   const [rows, setRows] = useState<CalRow[]>(initialRows);
 
   function buildExportRows() {
@@ -122,22 +122,26 @@ export function CalibrationStandardsCalculator() {
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => downloadExcel("Calibration Standards", exportColumns, buildExportRows(), "calibration-standards.xlsx")}
-          >
-            <FileSpreadsheet size={14} /> Excel
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() =>
-              downloadPdf("Calibration Standards (CAL Sheet)", exportColumns, buildExportRows(), "calibration-standards.pdf")
-            }
-          >
-            <FileText size={14} /> PDF
-          </Button>
+          {canDownload && (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => downloadExcel("Calibration Standards", exportColumns, buildExportRows(), "calibration-standards.xlsx")}
+              >
+                <FileSpreadsheet size={14} /> Excel
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() =>
+                  downloadPdf("Calibration Standards (CAL Sheet)", exportColumns, buildExportRows(), "calibration-standards.pdf")
+                }
+              >
+                <FileText size={14} /> PDF
+              </Button>
+            </>
+          )}
           <Button variant="secondary" size="sm" onClick={addRow}>
             <Plus size={14} /> Add row
           </Button>

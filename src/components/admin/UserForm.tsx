@@ -26,6 +26,7 @@ export function UserForm() {
         <select name="role" defaultValue="EDITOR" className="admin-input">
           <option value="EDITOR">Editor (can edit content)</option>
           <option value="SUPER_ADMIN">Super admin (can also manage accounts)</option>
+          <option value="VIEWER">Viewer (view only, no downloads)</option>
         </select>
       </Field>
 

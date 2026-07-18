@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { AskNanduniClient } from "@/components/ask-nanduni/AskNanduniClient";
+import { getSession, canEditContent } from "@/lib/auth";
 
 export const metadata: Metadata = { title: "Ask Nanduni" };
 
-export default function AskNanduniPage() {
+export default async function AskNanduniPage() {
+  const session = await getSession();
+  const canManageKb = !!session && canEditContent(session.role);
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
       <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Ask Nanduni" }]} />
@@ -14,7 +18,7 @@ export default function AskNanduniPage() {
         curated knowledge base, not a generic chatbot.
       </p>
       <div className="mt-8">
-        <AskNanduniClient />
+        <AskNanduniClient canManageKb={canManageKb} />
       </div>
     </div>
   );

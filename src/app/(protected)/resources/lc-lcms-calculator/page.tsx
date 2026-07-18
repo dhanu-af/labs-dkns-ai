@@ -2,10 +2,14 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { CalibrationStandardsCalculator } from "@/components/resources/CalibrationStandardsCalculator";
 import { SampleDilutionCalculator } from "@/components/resources/SampleDilutionCalculator";
+import { getSession, canEditContent } from "@/lib/auth";
 
 export const metadata: Metadata = { title: "LC/LCMS Calibration & Dilution Calculator" };
 
-export default function LcLcmsCalculatorPage() {
+export default async function LcLcmsCalculatorPage() {
+  const session = await getSession();
+  const canDownload = !!session && canEditContent(session.role);
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
       <Breadcrumbs
@@ -25,8 +29,8 @@ export default function LcLcmsCalculatorPage() {
       </p>
 
       <div className="mt-8 space-y-6">
-        <CalibrationStandardsCalculator />
-        <SampleDilutionCalculator />
+        <CalibrationStandardsCalculator canDownload={canDownload} />
+        <SampleDilutionCalculator canDownload={canDownload} />
       </div>
     </div>
   );

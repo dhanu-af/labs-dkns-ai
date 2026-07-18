@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { requireSession } from "@/lib/auth";
+import { requireSession, requireEditorOrAbove } from "@/lib/auth";
 import { slugify } from "@/lib/slugify";
 import type { KbCategory } from "@prisma/client";
 
@@ -104,7 +104,7 @@ function optionalString(raw: FormDataEntryValue | null): string | null {
 type ActionState = { error?: string } | undefined;
 
 export async function saveKbEntry(_prevState: ActionState, formData: FormData): Promise<ActionState> {
-  await requireSession();
+  await requireEditorOrAbove();
 
   const id = optionalString(formData.get("id"));
   const title = String(formData.get("title") ?? "").trim();
@@ -139,7 +139,7 @@ export async function saveKbEntry(_prevState: ActionState, formData: FormData): 
 }
 
 export async function deleteKbEntry(id: string) {
-  await requireSession();
+  await requireEditorOrAbove();
   await prisma.knowledgeEntry.delete({ where: { id } });
   redirect("/admin/knowledge-base");
 }

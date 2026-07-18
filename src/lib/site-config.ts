@@ -5,6 +5,8 @@ export interface NavItem {
   href: string;
   phase: Phase;
   description: string;
+  /** Show a mega-menu dropdown with live category data instead of a flat link. */
+  megaMenu?: boolean;
 }
 
 // Single source of truth for primary navigation, the footer, and the
@@ -12,8 +14,8 @@ export interface NavItem {
 // labs.dkns.ai sitemap. `phase` tracks the build-priority notes so stub
 // routes can say what's coming without needing new pages later.
 export const primaryNav: NavItem[] = [
-  { label: "Equipment", href: "/equipment", phase: 1, description: "Analytical instruments and general lab equipment" },
-  { label: "Methods", href: "/methods", phase: 1, description: "Chemical, instrumental, biological, and physical testing methods" },
+  { label: "Equipment", href: "/equipment", phase: 1, description: "Analytical instruments and general lab equipment", megaMenu: true },
+  { label: "Methods", href: "/methods", phase: 1, description: "Chemical, instrumental, biological, and physical testing methods", megaMenu: true },
   { label: "SOPs", href: "/sops", phase: 2, description: "Standard operating procedures library and templates" },
   { label: "Lab Management", href: "/lab-management", phase: 2, description: "Quality systems, operations, finance, and personnel" },
   { label: "Safety & Compliance", href: "/safety", phase: 1, description: "General lab safety, regulatory standards, waste management" },

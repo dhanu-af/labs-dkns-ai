@@ -2,9 +2,16 @@ import Link from "next/link";
 import { primaryNav, siteName } from "@/lib/site-config";
 import { SearchBar } from "@/components/layout/SearchBar";
 import { LogoutButton } from "@/components/layout/LogoutButton";
+import { MegaMenu } from "@/components/layout/MegaMenu";
+import { MobileNav } from "@/components/layout/MobileNav";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { IconTile } from "@/components/ui/IconTile";
+import { listEquipmentCategories } from "@/lib/content/equipment";
+import { listMethodCategories } from "@/lib/content/methods";
 
-export function SiteHeader() {
+export async function SiteHeader() {
+  const [equipmentTree, methodTree] = await Promise.all([listEquipmentCategories(), listMethodCategories()]);
+
   return (
     <header
       className="app-glass-header sticky top-0 z-40 border-b border-slate-900/[0.06] dark:border-white/10"
@@ -13,12 +20,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-3.5">
         <div className="flex items-center justify-between gap-6">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <span
-              className="app-hero-glow flex h-8 w-8 items-center justify-center rounded-lg text-sm font-bold text-white shadow-sm"
-              aria-hidden
-            >
-              L
-            </span>
+            <IconTile size="sm">L</IconTile>
             <span className="text-[15px] font-semibold tracking-tight text-slate-900 dark:text-white">
               {siteName}
             </span>
@@ -34,17 +36,27 @@ export function SiteHeader() {
           </Link>
           <ThemeToggle />
           <LogoutButton />
+          <MobileNav />
         </div>
-        <nav className="-mx-2 flex flex-wrap gap-1 overflow-x-auto text-sm">
-          {primaryNav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="app-pill rounded-full px-3.5 py-1.5 font-medium text-slate-600 hover:bg-slate-900/[0.05] hover:text-slate-900 dark:text-white/65 dark:hover:bg-white/10 dark:hover:text-white"
-            >
-              {item.label}
-            </Link>
-          ))}
+        <nav className="-mx-2 hidden flex-wrap gap-1 text-sm md:flex">
+          {primaryNav.map((item) =>
+            item.megaMenu ? (
+              <MegaMenu
+                key={item.href}
+                label={item.label}
+                href={item.href}
+                tree={item.href === "/equipment" ? equipmentTree : methodTree}
+              />
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="app-pill rounded-full px-3.5 py-1.5 font-medium text-slate-600 hover:bg-slate-900/[0.05] hover:text-slate-900 dark:text-white/65 dark:hover:bg-white/10 dark:hover:text-white"
+              >
+                {item.label}
+              </Link>
+            ),
+          )}
         </nav>
       </div>
     </header>

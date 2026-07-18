@@ -39,5 +39,5 @@ export const footerLinks: FooterLink[] = [
   { label: "Newsletter", href: "/newsletter" },
 ];
 
-export const siteName = "Labs.dkns.ai";
-export const siteTagline = "The reference hub for lab equipment, methods, and operations.";
+export const siteName = "DKNS Labs";
+export const siteTagline = "Your Complete Laboratory Knowledge & Management Platform.";
